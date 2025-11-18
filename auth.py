@@ -39,5 +39,3 @@ def register_user(username, password):
     hash_text_password = hash_password(password)
     with open("users.txt", 'a') as file:
 
-
-
