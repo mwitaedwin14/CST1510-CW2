@@ -41,5 +41,12 @@ with st.form("Add new incident"):
     date = st.date_input("Enter a date")
     incident_type = st.selectbox("Incident type", ["Malware", "Phishing", "DDoS"])
     severity = st.selectbox("Severity", ["Low", "Medium", "High", "Critical"])
-    status
+    status = st.selectbox("Status", ["Open", "Closed", "In Progress", "Resolved"])
+    description = st.text_input("Enter description")
+    submitted = st.form_submit_button("Submit")
+
+if submitted:
+    insert_incident(date, incident_type, severity, status, description)
+    st.success("Incident added")
+    st.rerun
 
