@@ -48,5 +48,5 @@ with st.form("Add new incident"):
 if submitted:
     insert_incident(date, incident_type, severity, status, description)
     st.success("Incident added")
-    st.rerun
+    st.rerun()
 
