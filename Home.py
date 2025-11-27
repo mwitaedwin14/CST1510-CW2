@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
-from app.data.incidents
-import (get_all_incidents)
+from app.data.incidents import (get_all_incidents)
 
 st.title("First Page")
 st.subheader("This is a subheader")
