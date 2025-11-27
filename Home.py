@@ -32,7 +32,7 @@ with col2:
 
 # Bar chart - fixed syntax errors
 severity_counts = df_incidents["severity"].value_counts().reset_index()
-severity_counts.columns = ["severity", "count"]  # Fixed spelling: 'columns' not 'columms'
+severity_counts.columns = ["severity", "count"]  # Fixed spelling: 'columns' not 'columns'
 
 st.bar_chart(severity_counts.set_index("severity"))  # Fixed: underscore not hyphen
 
