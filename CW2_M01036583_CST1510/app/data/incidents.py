@@ -17,9 +17,7 @@ def insert_incident(date, incident_type, severity, status, description, reported
     except Exception as e:
         print(f"Error inserting incident: {e}")
         return None
-    finally:
-        if conn:
-            conn.close()
+
 
 def get_all_incidents():
     """Get all incidents as DataFrame."""
@@ -33,6 +31,3 @@ def get_all_incidents():
     except Exception as e:
         print(f"Error fetching incidents: {e}")
         return pd.DataFrame()  # Return empty DataFrame on error
-    finally:
-        if conn:
-            conn.close()
