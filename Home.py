@@ -46,6 +46,8 @@ with st.form("Add new incident"):
     submitted = st.form_submit_button("Submit")
 
 if submitted:
+    # You'll need to import or define insert_incident function
+    from app.data.incidents import insert_incident  # Add this import
     insert_incident(date, incident_type, severity, status, description)
     st.success("Incident added")
     st.rerun()
