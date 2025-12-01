@@ -10,6 +10,6 @@ def connect_database(db_path=DB_PATH):
        Args:
            db_path: Path to the database file
        Returns:
-           sqlite3.Connection: Database onnection object
+           sqlite3.Connection: Database connection object
     """
     return sqlite3.connect(str(db_path))
