@@ -1,15 +1,12 @@
-from pathlib import Path
-
 import pandas as pd
-
 from app.data.db import connect_database
+from app.data.incidents import insert_incident, get_all_incidents
 from app.data.schema import create_all_tables
 from app.services.user_service import (
     register_user,
     login_user,
-    migrate_users_from_file,   # ← you had a typo in the import
+    migrate_users_from_file,  # ← you had a typo in the import
 )
-from app.data.incidents import insert_incident, get_all_incidents
 
 
 def main() -> None:
