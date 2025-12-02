@@ -95,7 +95,7 @@ def validate_password(password: str):
 def check_password_strength(password: str) -> str:
     """Return Weak, Medium, or Strong based on password criteria."""
     score = 0
-    feedback = []
+   
 
     if len(password) >= 8:
         score += 1
