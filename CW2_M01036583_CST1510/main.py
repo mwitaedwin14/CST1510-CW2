@@ -5,7 +5,7 @@ from app.data.schema import create_all_tables
 from app.services.user_service import (
     register_user,
     login_user,
-    migrate_users_from_file,  # ← you had a typo in the import
+    migrate_users_from_file,  
 )
 
 
