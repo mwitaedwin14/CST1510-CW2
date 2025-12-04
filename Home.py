@@ -1,4 +1,3 @@
-# Home.py - YOUR FINAL WORKING VERSION
 import streamlit as st
 import pandas as pd
 from datetime import datetime
@@ -20,7 +19,7 @@ df = pd.DataFrame({
 })
 st.dataframe(df)
 
-# ==================== CYBER INCIDENTS SECTION ====================
+#CYBER INCIDENTS SECTION
 st.subheader("Cyber Incidents")
 
 df_incidents = get_all_incidents()
@@ -44,7 +43,7 @@ else:
     # Show table
     st.dataframe(df_incidents, use_container_width=True)
 
-# ==================== ADD NEW INCIDENT FORM ====================
+# ADD NEW INCIDENT FORM
 st.markdown("## Add New Incident")
 
 with st.form("add_incident_form", clear_on_submit=True):
@@ -62,9 +61,9 @@ with st.form("add_incident_form", clear_on_submit=True):
     submitted = st.form_submit_button("Submit Incident", type="primary")
 
     if submitted:
-        # THIS IS THE CRITICAL FIX: convert date → string
+
         insert_incident(
-            date=str(date),                    # ← Convert to string!
+            date=str(date),
             incident_type=incident_type,
             severity=severity,
             status=status,
@@ -74,4 +73,4 @@ with st.form("add_incident_form", clear_on_submit=True):
         st.success(f"Incident reported on {date}!")
         st.rerun()
 
-st.caption("CST1510 - Multi-Domain Intelligence Platform | Week 9 Final Project")
+st.caption("CST1510 - Multi-Domain Intelligence Platform")
