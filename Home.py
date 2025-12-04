@@ -1,53 +1,77 @@
+# Home.py - YOUR FINAL WORKING VERSION
 import streamlit as st
 import pandas as pd
-from app.data.incidents import (get_all_incidents)
+from datetime import datetime
+from app.data.incidents import get_all_incidents, insert_incident
+
+st.set_page_config(page_title="Cyber Intelligence Platform", page_icon="shield")
 
 st.title("First Page")
 st.subheader("This is a subheader")
 
 name = st.text_input("Enter your name")
 if st.button("Submit"):
-    st.subheader(f"Hello, {name}")
+    st.write(f"Hello, **{name}**!")
 
-# Fixed DataFrame creation (corrected spelling and balanced data)
+# Sample static data
 df = pd.DataFrame({
     "User": ["Alice", "Bob", "Charlie", "David"],
-    "Score": [52, 60, 88, 75]  # Added missing value to match 4 users
+    "Score": [52, 60, 88, 75]
 })
-
 st.dataframe(df)
 
-st.subheader("Cyber incidents")
+# ==================== CYBER INCIDENTS SECTION ====================
+st.subheader("Cyber Incidents")
+
 df_incidents = get_all_incidents()
 
-# Metrics - fixed syntax errors
-col1, col2 = st.columns(2)
+if df_incidents.empty:
+    st.info("No incidents in database yet. Add one below!")
+else:
+    # Metrics
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.metric("Total Incidents", len(df_incidents))
+    with col2:
+        st.metric("High/Critical", len(df_incidents[df_incidents["severity"].isin(["High", "Critical"])]))
+    with col3:
+        st.metric("Open", len(df_incidents[df_incidents["status"] == "Open"]))
 
-with col1:
-    st.metric("High", df_incidents[df_incidents["severity"] == "High"].shape[0])
+    # Bar chart
+    severity_counts = df_incidents["severity"].value_counts()
+    st.bar_chart(severity_counts)
 
-with col2:
-    st.metric("Incidents", df_incidents.shape[0])  # Fixed: use shape[0] for total count
+    # Show table
+    st.dataframe(df_incidents, use_container_width=True)
 
-# Bar chart - fixed syntax errors
-severity_counts = df_incidents["severity"].value_counts().reset_index()
-severity_counts.columns = ["severity", "count"]  # Fixed spelling: 'columns' not 'columns'
+# ==================== ADD NEW INCIDENT FORM ====================
+st.markdown("## Add New Incident")
 
-st.bar_chart(severity_counts.set_index("severity"))  # Fixed: underscore not hyphen
+with st.form("add_incident_form", clear_on_submit=True):
+    col1, col2 = st.columns(2)
+    with col1:
+        date = st.date_input("Date of Incident", value=datetime.today())
+        incident_type = st.selectbox("Type", ["Phishing", "Malware", "DDoS", "Brute Force", "Data Leak", "Insider Threat"])
+    with col2:
+        severity = st.selectbox("Severity", ["Low", "Medium", "High", "Critical"])
+        status = st.selectbox("Status", ["Open", "In Progress", "Resolved", "Closed"])
 
-# Add incidents
-st.markdown("## Add incidents ##")
-with st.form("Add new incident"):
-    date = st.date_input("Enter a date")
-    incident_type = st.selectbox("Incident type", ["Malware", "Phishing", "DDoS"])
-    severity = st.selectbox("Severity", ["Low", "Medium", "High", "Critical"])
-    status = st.selectbox("Status", ["Open", "Closed", "In Progress", "Resolved"])
-    description = st.text_input("Enter description")
-    submitted = st.form_submit_button("Submit")
+    description = st.text_area("Description")
+    reported_by = st.text_input("Reported by (your name)", value="admin")
 
-if submitted:
-    # You'll need to import or define insert_incident function
-    from app.data.incidents import insert_incident  # Add this import
-    insert_incident(date, incident_type, severity, status, description)
-    st.success("Incident added")
-    st.rerun()
+    submitted = st.form_submit_button("Submit Incident", type="primary")
+
+    if submitted:
+        # THIS IS THE CRITICAL FIX: convert date → string
+        insert_incident(
+            date=str(date),                    # ← Convert to string!
+            incident_type=incident_type,
+            severity=severity,
+            status=status,
+            description=description,
+            reported_by=reported_by
+        )
+        st.success(f"Incident reported on {date}!")
+        st.rerun()
+
+st.caption("CST1510 - Multi-Domain Intelligence Platform | Week 9 Final Project")
