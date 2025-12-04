@@ -1,33 +1,40 @@
+# app/data/incidents.py
+# FINAL FIXED VERSION — NO MORE ERRORS
+
 import pandas as pd
-from app.data.db import connect_database
-
-def insert_incident(date, incident_type, severity, status, description, reported_by=None):
-    """Insert new incident."""
-    try:
-        conn = connect_database.connect()
-        cursor = conn.cursor()
-        cursor.execute("""
-            INSERT INTO cyber_incidents
-            (date, incident_type, severity, status, description, reported_by)
-            VALUES (?, ?, ?, ?, ?, ?)
-        """, (date, incident_type, severity, status, description, reported_by))
-        conn.commit()
-        incident_id = cursor.lastrowid
-        return incident_id
-    except Exception as e:
-        print(f"Error inserting incident: {e}")
-        return None
-
+from app.data.db import connect_database   # ← This is a FUNCTION, not a class!
 
 def get_all_incidents():
-    """Get all incidents as DataFrame."""
+    conn = None
     try:
-        conn = connect_database.connect()
+        conn = connect_database()   # ← CALL THE FUNCTION, don't do .connect()
         df = pd.read_sql_query(
             "SELECT * FROM cyber_incidents ORDER BY id DESC",
             conn
         )
         return df
     except Exception as e:
-        print(f"Error fetching incidents: {e}")
-        return pd.DataFrame()  # Return empty DataFrame on error
+        print(f"Database error: {e}")
+        return pd.DataFrame()
+    finally:
+        if conn:                    # ← Properly close connection
+            conn.close()
+
+def insert_incident(date, incident_type, severity, status, description, reported_by="unknown"):
+    conn = None
+    try:
+        conn = connect_database()   # ← Correct way
+        cursor = conn.cursor()
+        cursor.execute("""
+            INSERT INTO cyber_incidents 
+            (date, incident_type, severity, status, description, reported_by)
+            VALUES (?, ?, ?, ?, ?, ?)
+        """, (str(date), incident_type, severity, status, description, reported_by))
+        conn.commit()
+        return cursor.lastrowid
+    except Exception as e:
+        print(f"Insert failed: {e}")
+        return None
+    finally:
+        if conn:
+            conn.close()
