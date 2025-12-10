@@ -1,6 +1,6 @@
 streamlit
 pandas
 bcrypt
-openai
+gemini
 python-dotenv
 plotly  # For advanced viz (Week 9)
