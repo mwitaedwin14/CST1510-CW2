@@ -1,13 +1,13 @@
 # app/data/incidents.py
-# FINAL FIXED VERSION — NO MORE ERRORS
+
 
 import pandas as pd
-from app.data.db import connect_database   # ← This is a FUNCTION, not a class!
+from app.data.db import connect_database
 
 def get_all_incidents():
     conn = None
     try:
-        conn = connect_database()   # ← CALL THE FUNCTION, don't do .connect()
+        conn = connect_database()
         df = pd.read_sql_query(
             "SELECT * FROM cyber_incidents ORDER BY id DESC",
             conn
