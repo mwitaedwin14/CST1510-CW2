@@ -11,7 +11,7 @@ def hash_password(plain_text_password: str) -> str:
     password_bytes = plain_text_password.encode('utf-8')
     salt = bcrypt.gensalt()
     hashed_bytes = bcrypt.hashpw(password_bytes, salt)
-    return hashed_bytes.decode('utf-8') 
+    return hashed_bytes.decode('utf-8')
 
 
 def verify_password(plain_text_password: str, hashed_password: str) -> bool:
@@ -95,7 +95,7 @@ def validate_password(password: str):
 def check_password_strength(password: str) -> str:
     """Return Weak, Medium, or Strong based on password criteria."""
     score = 0
-   
+
 
     if len(password) >= 8:
         score += 1
