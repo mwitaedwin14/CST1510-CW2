@@ -1,5 +1,6 @@
 def create_all_tables(conn):
     cursor = conn.cursor()
+    conn = connect_database()
     # Users
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS users (
