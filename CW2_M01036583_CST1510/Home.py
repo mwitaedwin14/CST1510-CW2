@@ -5,6 +5,42 @@ from app.data.incidents import get_all_incidents, insert_incident
 
 st.set_page_config(page_title="Cyber Intelligence Platform", page_icon="shield")
 
+from app.data.users import get_user_by_username, insert_user
+import bcrypt
+
+# ============ LOGIN SYSTEM ============
+if 'logged_in' not in st.session_state:
+    st.session_state.logged_in = False
+
+if not st.session_state.logged_in:
+    col1, col2 = st.columns(2)
+    with col1:
+        st.subheader("Login")
+        username = st.text_input("Username", key="login_user")
+        password = st.text_input("Password", type="password", key="login_pass")
+        if st.button("Log In"):
+            user = get_user_by_username(username)
+            if user and bcrypt.checkpw(password.encode(), user[2].encode()):
+                st.session_state.logged_in = True
+                st.session_state.username = username
+                st.rerun()
+            else:
+                st.error("Wrong username/password")
+    with col2:
+        st.subheader("Register")
+        new_u = st.text_input("New username", key="reg_user")
+        new_p = st.text_input("New password", type="password", key="reg_pass")
+        if st.button("Register"):
+            hashed = bcrypt.hashpw(new_p.encode(), bcrypt.gensalt())
+            insert_user(new_u, hashed.decode())
+            st.success("Account created!")
+    st.stop()  # ← stops the app until logged in
+else:
+    st.sidebar.success(f"Welcome, {st.session_state.username}")
+    if st.sidebar.button("Logout"):
+        st.session_state.logged_in = False
+        st.rerun()
+
 st.title("First Page")
 st.subheader("This is a subheader")
 
