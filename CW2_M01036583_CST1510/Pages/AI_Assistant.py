@@ -1,10 +1,10 @@
-# pages/4_AI_Assistant.py  ← THIS IS YOUR WEEK 10 FULL MARKS
+# pages/4_AI_Assistant.py
 import streamlit as st
 import google.generativeai as genai
 from app.data.incidents import get_all_incidents
 
 # === GEMINI SETUP ===
-genai.configure(api_key="AIzaSyC3A3G2aVL_891cbAUOnY-Obc9ylr8Ul_0")  # Your key
+genai.configure(api_key="AIzaSyC3A3G2aVL_891cbAUOnY-Obc9ylr8Ul_0")
 model = genai.GenerativeModel('gemini-1.5-flash')
 
 # === CHAT HISTORY ===
