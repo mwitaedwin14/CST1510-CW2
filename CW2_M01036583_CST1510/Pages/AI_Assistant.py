@@ -30,14 +30,20 @@ if prompt := st.chat_input("Type your question here..."):
 
     # Prepare context from real data
     df = get_all_incidents()
-    context = f"""
-    Current cybersecurity incidents in the database:
-    Total: {len(df)}
-    High/Critical: {len(df[df['severity'].isin(['High', 'Critical'])])} 
-    Open: {len(df['status'] == 'Open').sum()}
-    Most common type: {df['incident_type'].mode().iloc[0] if not df.empty else 'None'}
-    """
 
+    # FIXED VERSION — NO MORE ERRORS
+    total_incidents = len(df)
+    open_incidents = len(df[df['status'] == 'Open']) if not df.empty else 0
+    high_critical = len(df[df['severity'].isin(['High', 'Critical'])]) if not df.empty else 0
+    most_common = df['incident_type'].mode().iloc[0] if not df.empty else "None"
+
+    context = f"""
+    Current cybersecurity incidents:
+    • Total incidents: {total_incidents}
+    • Open incidents: {open_incidents}
+    • High/Critical severity: {high_critical}
+    • Most common type: {most_common}
+    """
     full_prompt = f"{context}\n\nUser question: {prompt}\nAnswer professionally and concisely."
 
     # Get AI response
@@ -48,3 +54,4 @@ if prompt := st.chat_input("Type your question here..."):
 
     # Save assistant reply
     st.session_state.messages.append({"role": "assistant", "content": response.text})
+
