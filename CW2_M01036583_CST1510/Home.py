@@ -48,24 +48,40 @@ else:
         st.session_state.logged_in = False
         st.rerun()
 
-
 st.sidebar.title("Gemini AI Assistant")
-question = st.sidebar.text_input("Ask about incidents/data")
-if st.sidebar.button("Get AI Answer"):
-    # Get real data
-    df_incidents = get_all_incidents()
-    data_text = df_incidents.to_string(index=False)
-    prompt = f"""
-    You are a cybersecurity expert.
-    Current incidents:
-    {data_text}
+question = st.sidebar.text_input("Ask about incidents/data", key="ai_question")
 
-    User question: {question}
-    Give a short, professional answer.
-    """
-    with st.sidebar.spinner("Thinking..."):
-        response = model.generate_content(prompt)
-        st.sidebar.success(response.text)
+if st.sidebar.button("Get AI Answer", key="ai_button"):
+    if question.strip() == "":
+        st.sidebar.error("Please type a question")
+    else:
+        # Get current data
+        df_incidents = get_all_incidents()
+        data_summary = f"""
+        Current incidents: {len(df_incidents)}
+        Most common type: {df_incidents['incident_type'].mode().iloc[0] if not df_incidents.empty else 'None'}
+        High/Critical: {len(df_incidents[df_incidents['severity'].isin(['High', 'Critical'])])} 
+        Open: {len(df_incidents[df_incidents['status'] == 'Open'])}
+        """
+
+        full_prompt = f"""
+        You are a senior cybersecurity analyst.
+        {data_summary}
+
+        User question: {question}
+        Give a short, professional answer.
+        """
+
+        # THIS IS THE CORRECT WAY — spinner in main area, not sidebar
+        with st.spinner("Gemini is thinking..."):
+            import google.generativeai as genai
+
+            genai.configure(api_key="AIzaSyC3A3G2aVL_891cbAUOnY-Obc9ylr8Ul_0")
+            model = genai.GenerativeModel('gemini-1.5-flash')
+            response = model.generate_content(full_prompt)
+
+        st.sidebar.success("Gemini Answer:")
+        st.sidebar.write(response.text)
 
 
 st.title("First Page")
