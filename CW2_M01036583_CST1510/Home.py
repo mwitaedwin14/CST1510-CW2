@@ -51,7 +51,7 @@ else:
 st.sidebar.title("Gemini AI Assistant")
 question = st.sidebar.text_input("Ask about incidents/data", key="ai_question")
 
-if st.sidebar.button("Get AI Answer", key="ai_button"):
+if st.sidebar.button("Generate an Answer", key="ai_button"):
     if question.strip() == "":
         st.sidebar.error("Please type a question")
     else:
@@ -72,7 +72,7 @@ if st.sidebar.button("Get AI Answer", key="ai_button"):
         Give a short, professional answer.
         """
 
-        # THIS IS THE CORRECT WAY — spinner in main area, not sidebar
+
         with st.spinner("Gemini is thinking..."):
             import google.generativeai as genai
 
