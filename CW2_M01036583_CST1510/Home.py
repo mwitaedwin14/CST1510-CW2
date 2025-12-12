@@ -42,7 +42,7 @@ else:
         st.rerun()
 
 st.title("First Page")
-st.subheader("This is a subheader")
+st.subheader("Report your incidents:")
 
 name = st.text_input("Enter your name")
 if st.button("Submit"):
