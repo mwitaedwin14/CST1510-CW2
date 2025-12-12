@@ -3,6 +3,9 @@ import pandas as pd
 from datetime import datetime
 from app.data.incidents import get_all_incidents, insert_incident
 
+from app.data.schema import create_all_tables
+create_all_tables()
+
 st.set_page_config(page_title="Cyber Intelligence Platform", page_icon="shield")
 
 from app.data.users import get_user_by_username, insert_user
