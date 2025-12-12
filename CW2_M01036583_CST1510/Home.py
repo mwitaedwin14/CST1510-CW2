@@ -77,7 +77,7 @@ if st.sidebar.button("Get AI Answer", key="ai_button"):
             import google.generativeai as genai
 
             genai.configure(api_key="AIzaSyC3A3G2aVL_891cbAUOnY-Obc9ylr8Ul_0")
-            model = genai.GenerativeModel('gemini-1.5-flash')
+            model = genai.GenerativeModel('gemini-flash-latest')
             response = model.generate_content(full_prompt)
 
         st.sidebar.success("Gemini Answer:")
