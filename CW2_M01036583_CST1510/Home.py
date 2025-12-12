@@ -3,10 +3,25 @@ import pandas as pd
 from datetime import datetime
 from app.data.incidents import get_all_incidents, insert_incident
 
-from app.data.schema import create_all_tables
-create_all_tables()
-pd.read_csv('DATA/cyber_incidents.csv').to_sql('cyber_incidents', if_exists='replace', index=False)
-conn.close()
+
+#LOAD DATABASE & CSVs ONCE
+if 'db_initialized' not in st.session_state:
+    from app.data.db import connect_database
+    from app.data.schema import create_all_tables
+
+    conn = connect_database()
+    create_all_tables()  # creates users + all tables
+
+    # Load all 3 CSVs into the database
+    pd.read_csv('DATA/cyber_incidents.csv').to_sql('cyber_incidents', conn, if_exists='replace', index=False)
+    pd.read_csv('DATA/datasets_metadata.csv').to_sql('datasets_metadata', conn, if_exists='replace', index=False)
+    pd.read_csv('DATA/it_tickets.csv').to_sql('it_tickets', conn, if_exists='replace', index=False)
+
+    conn.close()
+    st.session_state.db_initialized = True
+    st.success("Database loaded with real data!")
+
+
 
 st.set_page_config(page_title="Cyber Intelligence Platform", page_icon="shield")
 
