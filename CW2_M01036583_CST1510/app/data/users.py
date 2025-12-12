@@ -2,6 +2,7 @@
 import sqlite3
 from app.data.db import connect_database
 
+
 def get_user_by_username(username):
     conn = connect_database()
     cursor = conn.cursor()
