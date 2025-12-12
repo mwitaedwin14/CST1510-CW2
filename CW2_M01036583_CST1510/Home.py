@@ -5,7 +5,7 @@ from app.data.incidents import get_all_incidents, insert_incident
 
 from app.data.schema import create_all_tables
 create_all_tables()
-pd.read_csv('DATA/cyber_incidents.csv').to_sql('cyber_incidents', conn, if_exists='replace', index=False)
+pd.read_csv('DATA/cyber_incidents.csv').to_sql('cyber_incidents', if_exists='replace', index=False)
 conn.close()
 
 st.set_page_config(page_title="Cyber Intelligence Platform", page_icon="shield")
