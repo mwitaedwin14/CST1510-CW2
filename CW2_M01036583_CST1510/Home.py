@@ -5,7 +5,6 @@ from app.data.incidents import get_all_incidents, insert_incident
 
 from app.data.schema import create_all_tables
 create_all_tables()
-conn = connect_database()
 pd.read_csv('DATA/cyber_incidents.csv').to_sql('cyber_incidents', conn, if_exists='replace', index=False)
 conn.close()
 
