@@ -8,6 +8,13 @@ st.set_page_config(page_title="Cyber Intelligence Platform", page_icon="shield")
 from app.data.users import get_user_by_username, insert_user
 import bcrypt
 
+import google.generativeai as genai
+
+GEMINI_API_KEY = "AIzaSyC3A3G2aVL_891cbAUOnY-Obc9ylr8Ul_0"  #
+
+genai.configure(api_key=GEMINI_API_KEY)
+model = genai.GenerativeModel('gemini-1.5-flash')
+
 # ============ LOGIN SYSTEM ============
 if 'logged_in' not in st.session_state:
     st.session_state.logged_in = False
