@@ -48,6 +48,26 @@ else:
         st.session_state.logged_in = False
         st.rerun()
 
+
+st.sidebar.title("Gemini AI Assistant")
+question = st.sidebar.text_input("Ask about incidents/data")
+if st.sidebar.button("Get AI Answer"):
+    # Get real data
+    df_incidents = get_all_incidents()
+    data_text = df_incidents.to_string(index=False)
+    prompt = f"""
+    You are a cybersecurity expert.
+    Current incidents:
+    {data_text}
+
+    User question: {question}
+    Give a short, professional answer.
+    """
+    with st.sidebar.spinner("Thinking..."):
+        response = model.generate_content(prompt)
+        st.sidebar.success(response.text)
+
+
 st.title("First Page")
 st.subheader("Report your incidents:")
 
