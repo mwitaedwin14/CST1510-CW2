@@ -84,6 +84,18 @@ if st.sidebar.button("Generate an Answer", key="ai_button"):
         st.sidebar.write(response.text)
 
 
+# Sidebar for domain navigation
+st.sidebar.title("Domains")
+domain = st.sidebar.radio("Select Domain", ["Cybersecurity", "Data Science", "IT Operations"])
+
+if domain == "Cybersecurity":
+    st.title("Cybersecurity Dashboard")
+elif domain == "Data Science":
+    st.title("Data Science Dashboard")
+elif domain == "IT Operations":
+    st.title("IT Operations Dashboard")
+
+
 st.title("First Page")
 st.subheader("Report your incidents:")
 
