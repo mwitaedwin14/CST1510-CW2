@@ -112,3 +112,5 @@ def create_it_tickets_table(conn):
     """
     # TODO: Implement following the users table pattern
     pass
+def connect_database():
+    return sqlite3.connect(DB_PATH, timeout=10.0)
