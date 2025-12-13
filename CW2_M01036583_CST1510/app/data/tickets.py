@@ -4,7 +4,7 @@ from app.data.db import connect_database
 
 def get_all_tickets():
     conn = connect_database()
-    df = pd.read_sql_query("SELECT * FROM it_tickets ORDER BY id DESC", conn)
+    df = pd.read_sql_query("SELECT * FROM it_tickets", conn)  # Remove ORDER BY id
     conn.close()
     return df
 
