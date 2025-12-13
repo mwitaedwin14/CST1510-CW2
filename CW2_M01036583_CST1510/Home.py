@@ -155,7 +155,6 @@ with st.form("add_incident_form", clear_on_submit=True):
     submitted = st.form_submit_button("Submit Incident", type="primary")
 
     if submitted:
-
         insert_incident(
             date=str(date),
             incident_type=incident_type,
