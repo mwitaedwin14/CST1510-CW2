@@ -163,7 +163,7 @@ with st.form("add_incident_form", clear_on_submit=True):
             description=description,
             reported_by=reported_by
         )
-        st.success(f"Incident reported on {date}!")
+        st.success(f"Incident added to database.!")
         st.rerun()
 
 st.caption("CST1510 - Multi-Domain Intelligence Platform")
