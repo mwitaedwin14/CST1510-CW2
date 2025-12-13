@@ -13,7 +13,7 @@ import google.generativeai as genai
 GEMINI_API_KEY = "AIzaSyC3A3G2aVL_891cbAUOnY-Obc9ylr8Ul_0"  #
 
 genai.configure(api_key=GEMINI_API_KEY)
-model = genai.GenerativeModel('gemini-1.5-flash')
+model = genai.GenerativeModel('gemini-1.5-flash-latest')
 
 # ============ LOGIN SYSTEM ============
 if 'logged_in' not in st.session_state:
@@ -48,24 +48,52 @@ else:
         st.session_state.logged_in = False
         st.rerun()
 
-
 st.sidebar.title("Gemini AI Assistant")
-question = st.sidebar.text_input("Ask about incidents/data")
-if st.sidebar.button("Get AI Answer"):
-    # Get real data
-    df_incidents = get_all_incidents()
-    data_text = df_incidents.to_string(index=False)
-    prompt = f"""
-    You are a cybersecurity expert.
-    Current incidents:
-    {data_text}
+question = st.sidebar.text_input("Ask about incidents/data", key="ai_question")
 
-    User question: {question}
-    Give a short, professional answer.
-    """
-    with st.sidebar.spinner("Thinking..."):
-        response = model.generate_content(prompt)
-        st.sidebar.success(response.text)
+if st.sidebar.button("Generate an Answer", key="ai_button"):
+    if question.strip() == "":
+        st.sidebar.error("Please type a question")
+    else:
+        # Get current data
+        df_incidents = get_all_incidents()
+        data_summary = f"""
+        Current incidents: {len(df_incidents)}
+        Most common type: {df_incidents['incident_type'].mode().iloc[0] if not df_incidents.empty else 'None'}
+        High/Critical: {len(df_incidents[df_incidents['severity'].isin(['High', 'Critical'])])} 
+        Open: {len(df_incidents[df_incidents['status'] == 'Open'])}
+        """
+
+        full_prompt = f"""
+        You are a senior cybersecurity analyst.
+        {data_summary}
+
+        User question: {question}
+        Give a short, professional answer.
+        """
+
+
+        with st.spinner("Gemini is thinking..."):
+            import google.generativeai as genai
+
+            genai.configure(api_key="AIzaSyC3A3G2aVL_891cbAUOnY-Obc9ylr8Ul_0")
+            model = genai.GenerativeModel('gemini-1.5-flash-latest')
+            response = model.generate_content(full_prompt)
+
+        st.sidebar.success("Gemini Answer:")
+        st.sidebar.write(response.text)
+
+
+# Sidebar for domain navigation
+st.sidebar.title("Domains")
+domain = st.sidebar.radio("Select Domain", ["Cybersecurity", "Data Science", "IT Operations"])
+
+if domain == "Cybersecurity":
+    st.title("Cybersecurity Dashboard")
+elif domain == "Data Science":
+    st.title("Data Science Dashboard")
+elif domain == "IT Operations":
+    st.title("IT Operations Dashboard")
 
 
 st.title("First Page")
@@ -123,16 +151,17 @@ with st.form("add_incident_form", clear_on_submit=True):
 
     submitted = st.form_submit_button("Submit Incident", type="primary")
 
-if submitted:
-    insert_incident(
-        str(date),
-        incident_type,
-        severity,
-        status,
-        description,
-        reported_by
-    )
-    st.success(f"Incident reported on {date}!")
-    st.rerun()
+    if submitted:
+
+        insert_incident(
+            date=str(date),
+            incident_type=incident_type,
+            severity=severity,
+            status=status,
+            description=description,
+            reported_by=reported_by
+        )
+        st.success(f"Incident reported on {date}!")
+        st.rerun()
 
 st.caption("CST1510 - Multi-Domain Intelligence Platform")
