@@ -5,6 +5,9 @@ from app.data.incidents import get_all_incidents, insert_incident
 
 st.set_page_config(page_title="Cyber Intelligence Platform", page_icon="shield")
 
+import sqlite3
+sqlite3.connect('DATA/intelligence_platform.db', timeout=10.0)  # Increases lock timeout
+
 from app.data.users import get_user_by_username, insert_user
 import bcrypt
 
