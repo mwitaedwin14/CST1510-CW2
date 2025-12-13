@@ -123,17 +123,16 @@ with st.form("add_incident_form", clear_on_submit=True):
 
     submitted = st.form_submit_button("Submit Incident", type="primary")
 
-    if submitted:
-
-        insert_incident(
-            date=str(date),
-            incident_type=incident_type,
-            severity=severity,
-            status=status,
-            description=description,
-            reported_by=reported_by
-        )
-        st.success(f"Incident reported on {date}!")
-        st.rerun()
+if submitted:
+    insert_incident(
+        str(date),
+        incident_type,
+        severity,
+        status,
+        description,
+        reported_by
+    )
+    st.success(f"Incident reported on {date}!")
+    st.rerun()
 
 st.caption("CST1510 - Multi-Domain Intelligence Platform")
