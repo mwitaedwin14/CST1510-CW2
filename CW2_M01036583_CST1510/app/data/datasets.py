@@ -2,9 +2,10 @@
 import pandas as pd
 from app.data.db import connect_database
 
+# For datasets.py
 def get_all_datasets():
     conn = connect_database()
-    df = pd.read_sql_query("SELECT * FROM datasets_metadata ORDER BY id DESC", conn)
+    df = pd.read_sql_query("SELECT * FROM datasets_metadata", conn)
     conn.close()
     return df
 
