@@ -1,32 +1,22 @@
 # app/data/incidents.py
 
-
+# app/data/incidents.py
 import pandas as pd
 from app.data.db import connect_database
 
 def get_all_incidents():
-    conn = None
-    try:
-        conn = connect_database()
-        df = pd.read_sql_query(
-            "SELECT * FROM cyber_incidents ORDER BY id DESC",
-            conn
-        )
-        return df
-    except Exception as e:
-        print(f"Database error: {e}")
-        return pd.DataFrame()
-    finally:
-        if conn:                    # ← Properly close connection
-            conn.close()
+    conn = connect_database()
+    df = pd.read_sql_query("SELECT * FROM cyber_incidents ORDER BY date DESC", conn)
+    conn.close()
+    return df
 
-# In insert_incident function
-def insert_incident(incident):
+def insert_incident(date, incident_type, severity, status, description, reported_by):
     conn = connect_database()
     cursor = conn.cursor()
     cursor.execute("""
-        INSERT INTO cyber_incidents (date, incident_type, severity, status, description, reported_by)
+        INSERT INTO cyber_incidents 
+        (date, incident_type, severity, status, description, reported_by)
         VALUES (?, ?, ?, ?, ?, ?)
-    """, (incident.date, incident.type, incident.severity, incident.status, incident.description, incident.reporter))
+    """, (date, incident_type, severity, status, description, reported_by))
     conn.commit()
     conn.close()
