@@ -1,25 +1,34 @@
-#Week 7: Secure Authentication System
+# CST1510 Coursework 2 – Multi-Domain Intelligence Platform  
+Edwin Mwita – M01036583  
+Degree: BSc Information Technology
+  
+https://github.com/mwitaedwin14/CST1510-CW2
 
-Student Name: Edwin Mwita
-Student ID: M01036583
-Course: CST1510-CW2- Multi-Domain Intelligence Platform
+## Project Overview
+A secure, real-time web application built with **Python + Streamlit** that delivers intelligent insights for three domains:
+- **Cybersecurity Analysts** – track and respond to incidents
+- **Data Scientists** – manage and visualize dataset metadata
+- **IT Administrators** – monitor and prioritize support tickets
 
-##Project Description
+**Primary focus**: Cybersecurity domain (Tier 1) with full secure authentication, real CSV data, live dashboard, and incident reporting. Data Science and IT Operations domains are implemented with dedicated views and visualizations.
 
-A command line authentication system implementing secure password hashing
-This system allows users to register accounts and log in with proper pass
+## Key Features
+- **Secure Authentication** – bcrypt hashing, login/registration with SQLite backend (Week 7)
+- **Database Persistence** – SQLite with real data loaded from 3 CSV files (Week 8)
+- **Live Cybersecurity Dashboard** – metrics, interactive bar chart, real-time table (Week 9)
+- **Incident Reporting** – form to add new incidents with instant update
+- **Multi-Domain Navigation** – sidebar switching between Cybersecurity, Data Science, and IT Operations
+- **Gemini AI Assistant** – sidebar AI that analyzes current incidents using real data (Week 10)
+- **Professional UI** – dark mode, responsive layout, clean design
 
-#Features
+## How to Run Locally
+```bash
+# Clone the repository
+git clone https://github.com/mwitaedwin14/CST1510-CW2.git
+cd CST1510-CW2
 
-- Secure password hashing using bcrypt with automatic salt generation
-- User registeration with duplicate username protection
-- User login with password verification
-- Input validation for usernames and passwords
-- File-based user data persistence
+# Install dependencies
+pip install -r requirements.txt
 
-##Technical implementation
-
--Hashing Algorithm: bcrypt with automatic salting 
--Data Storage: Plain text file ('users.txt') with comma-separated values 
--Password Security: One-way hashing, no plaintext storage 
--Validation: Username (3-20 alphanumeric characters), Password(6-50 characters)
+# Run the app
+streamlit run Home.py
